@@ -1,0 +1,17 @@
+{
+  "best_model": "Linear SVM",
+  "labels": [
+    "negative",
+    "neutral",
+    "positive"
+  ],
+  "trained_on": "twitter_financial_news (11,931 tweets)",
+  "tfidf": {
+    "ngram_range": [
+      1,
+      2
+    ],
+    "min_df": 2,
+    "max_features": 20000
+  }
+}

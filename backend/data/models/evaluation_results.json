@@ -1,0 +1,576 @@
+{
+  "results": [
+    {
+      "model": "Multinomial Naive Bayes",
+      "dataset": "twitter_financial_news",
+      "accuracy": 0.7394,
+      "precision_macro": 0.8295,
+      "recall_macro": 0.514,
+      "f1_macro": 0.5549,
+      "train_time_s": 0.0,
+      "inference_time_s": 0.0,
+      "n_train": 9544,
+      "n_test": 2387,
+      "confusion_matrix": [
+        [
+          75,
+          265,
+          18
+        ],
+        [
+          0,
+          1522,
+          27
+        ],
+        [
+          2,
+          310,
+          168
+        ]
+      ],
+      "labels_order": [
+        "negative",
+        "neutral",
+        "positive"
+      ],
+      "classification_report": {
+        "negative": {
+          "precision": 0.974025974025974,
+          "recall": 0.20949720670391062,
+          "f1-score": 0.3448275862068966,
+          "support": 358.0
+        },
+        "neutral": {
+          "precision": 0.7257987601335241,
+          "recall": 0.9825693996126533,
+          "f1-score": 0.8348875479978058,
+          "support": 1549.0
+        },
+        "positive": {
+          "precision": 0.7887323943661971,
+          "recall": 0.35,
+          "f1-score": 0.48484848484848486,
+          "support": 480.0
+        },
+        "accuracy": 0.7394218684541265,
+        "macro avg": {
+          "precision": 0.8295190428418984,
+          "recall": 0.5140222021055213,
+          "f1-score": 0.5548545396843957,
+          "support": 2387.0
+        },
+        "weighted avg": {
+          "precision": 0.7756829189124014,
+          "recall": 0.7394218684541265,
+          "f1-score": 0.6909997320644923,
+          "support": 2387.0
+        }
+      }
+    },
+    {
+      "model": "Logistic Regression",
+      "dataset": "twitter_financial_news",
+      "accuracy": 0.8023,
+      "precision_macro": 0.8257,
+      "recall_macro": 0.6448,
+      "f1_macro": 0.696,
+      "train_time_s": 1.129,
+      "inference_time_s": 0.0,
+      "n_train": 9544,
+      "n_test": 2387,
+      "confusion_matrix": [
+        [
+          147,
+          179,
+          32
+        ],
+        [
+          8,
+          1502,
+          39
+        ],
+        [
+          10,
+          204,
+          266
+        ]
+      ],
+      "labels_order": [
+        "negative",
+        "neutral",
+        "positive"
+      ],
+      "classification_report": {
+        "negative": {
+          "precision": 0.8909090909090909,
+          "recall": 0.4106145251396648,
+          "f1-score": 0.5621414913957935,
+          "support": 358.0
+        },
+        "neutral": {
+          "precision": 0.7968169761273209,
+          "recall": 0.9696578437701743,
+          "f1-score": 0.8747815958066395,
+          "support": 1549.0
+        },
+        "positive": {
+          "precision": 0.7893175074183977,
+          "recall": 0.5541666666666667,
+          "f1-score": 0.6511627906976745,
+          "support": 480.0
+        },
+        "accuracy": 0.8022622538751571,
+        "macro avg": {
+          "precision": 0.8256811914849366,
+          "recall": 0.6448130118588352,
+          "f1-score": 0.6960286259667026,
+          "support": 2387.0
+        },
+        "weighted avg": {
+          "precision": 0.8094207600031444,
+          "recall": 0.8022622538751571,
+          "f1-score": 0.7829247948718318,
+          "support": 2387.0
+        }
+      }
+    },
+    {
+      "model": "Linear SVM",
+      "dataset": "twitter_financial_news",
+      "accuracy": 0.8295,
+      "precision_macro": 0.804,
+      "recall_macro": 0.7274,
+      "f1_macro": 0.7582,
+      "train_time_s": 0.059,
+      "inference_time_s": 0.0,
+      "n_train": 9544,
+      "n_test": 2387,
+      "confusion_matrix": [
+        [
+          208,
+          118,
+          32
+        ],
+        [
+          33,
+          1454,
+          62
+        ],
+        [
+          22,
+          140,
+          318
+        ]
+      ],
+      "labels_order": [
+        "negative",
+        "neutral",
+        "positive"
+      ],
+      "classification_report": {
+        "negative": {
+          "precision": 0.7908745247148289,
+          "recall": 0.5810055865921788,
+          "f1-score": 0.6698872785829307,
+          "support": 358.0
+        },
+        "neutral": {
+          "precision": 0.8492990654205608,
+          "recall": 0.9386701097482246,
+          "f1-score": 0.8917509966268016,
+          "support": 1549.0
+        },
+        "positive": {
+          "precision": 0.7718446601941747,
+          "recall": 0.6625,
+          "f1-score": 0.7130044843049327,
+          "support": 480.0
+        },
+        "accuracy": 0.8294930875576036,
+        "macro avg": {
+          "precision": 0.8040060834431881,
+          "recall": 0.7273918987801345,
+          "f1-score": 0.758214253171555,
+          "support": 2387.0
+        },
+        "weighted avg": {
+          "precision": 0.8249613611552414,
+          "recall": 0.8294930875576036,
+          "f1-score": 0.8225320871277639,
+          "support": 2387.0
+        }
+      }
+    },
+    {
+      "model": "Random Forest",
+      "dataset": "twitter_financial_news",
+      "accuracy": 0.788,
+      "precision_macro": 0.8247,
+      "recall_macro": 0.6136,
+      "f1_macro": 0.6644,
+      "train_time_s": 3.453,
+      "inference_time_s": 0.0459,
+      "n_train": 9544,
+      "n_test": 2387,
+      "confusion_matrix": [
+        [
+          123,
+          202,
+          33
+        ],
+        [
+          6,
+          1506,
+          37
+        ],
+        [
+          6,
+          222,
+          252
+        ]
+      ],
+      "labels_order": [
+        "negative",
+        "neutral",
+        "positive"
+      ],
+      "classification_report": {
+        "negative": {
+          "precision": 0.9111111111111111,
+          "recall": 0.3435754189944134,
+          "f1-score": 0.49898580121703856,
+          "support": 358.0
+        },
+        "neutral": {
+          "precision": 0.7803108808290156,
+          "recall": 0.9722401549386701,
+          "f1-score": 0.8657660247197471,
+          "support": 1549.0
+        },
+        "positive": {
+          "precision": 0.782608695652174,
+          "recall": 0.525,
+          "f1-score": 0.628428927680798,
+          "support": 480.0
+        },
+        "accuracy": 0.7880184331797235,
+        "macro avg": {
+          "precision": 0.8246768958641001,
+          "recall": 0.6136051913110278,
+          "f1-score": 0.6643935845391945,
+          "support": 2387.0
+        },
+        "weighted avg": {
+          "precision": 0.8003902413468648,
+          "recall": 0.7880184331797235,
+          "f1-score": 0.7630307391761086,
+          "support": 2387.0
+        }
+      }
+    },
+    {
+      "model": "Multinomial Naive Bayes",
+      "dataset": "financial_phrasebank",
+      "accuracy": 0.8013,
+      "precision_macro": 0.8329,
+      "recall_macro": 0.6407,
+      "f1_macro": 0.6591,
+      "train_time_s": 0.0,
+      "inference_time_s": 0.0,
+      "n_train": 1811,
+      "n_test": 453,
+      "confusion_matrix": [
+        [
+          15,
+          12,
+          34
+        ],
+        [
+          0,
+          266,
+          12
+        ],
+        [
+          0,
+          32,
+          82
+        ]
+      ],
+      "labels_order": [
+        "negative",
+        "neutral",
+        "positive"
+      ],
+      "classification_report": {
+        "negative": {
+          "precision": 1.0,
+          "recall": 0.2459016393442623,
+          "f1-score": 0.39473684210526316,
+          "support": 61.0
+        },
+        "neutral": {
+          "precision": 0.8580645161290322,
+          "recall": 0.9568345323741008,
+          "f1-score": 0.9047619047619048,
+          "support": 278.0
+        },
+        "positive": {
+          "precision": 0.640625,
+          "recall": 0.7192982456140351,
+          "f1-score": 0.6776859504132231,
+          "support": 114.0
+        },
+        "accuracy": 0.8013245033112583,
+        "macro avg": {
+          "precision": 0.8328965053763441,
+          "recall": 0.6406781391107994,
+          "f1-score": 0.6590615657601303,
+          "support": 453.0
+        },
+        "weighted avg": {
+          "precision": 0.8224573630990528,
+          "recall": 0.8013245033112583,
+          "f1-score": 0.7789380910360663,
+          "support": 453.0
+        }
+      }
+    },
+    {
+      "model": "Logistic Regression",
+      "dataset": "financial_phrasebank",
+      "accuracy": 0.8786,
+      "precision_macro": 0.8795,
+      "recall_macro": 0.7902,
+      "f1_macro": 0.8246,
+      "train_time_s": 0.219,
+      "inference_time_s": 0.0,
+      "n_train": 1811,
+      "n_test": 453,
+      "confusion_matrix": [
+        [
+          39,
+          7,
+          15
+        ],
+        [
+          0,
+          274,
+          4
+        ],
+        [
+          3,
+          26,
+          85
+        ]
+      ],
+      "labels_order": [
+        "negative",
+        "neutral",
+        "positive"
+      ],
+      "classification_report": {
+        "negative": {
+          "precision": 0.9285714285714286,
+          "recall": 0.639344262295082,
+          "f1-score": 0.7572815533980582,
+          "support": 61.0
+        },
+        "neutral": {
+          "precision": 0.8925081433224755,
+          "recall": 0.9856115107913669,
+          "f1-score": 0.9367521367521368,
+          "support": 278.0
+        },
+        "positive": {
+          "precision": 0.8173076923076923,
+          "recall": 0.7456140350877193,
+          "f1-score": 0.7798165137614679,
+          "support": 114.0
+        },
+        "accuracy": 0.8785871964679912,
+        "macro avg": {
+          "precision": 0.8794624214005321,
+          "recall": 0.7901899360580561,
+          "f1-score": 0.824616734637221,
+          "support": 453.0
+        },
+        "weighted avg": {
+          "precision": 0.878439730484729,
+          "recall": 0.8785871964679912,
+          "f1-score": 0.8730912833182846,
+          "support": 453.0
+        }
+      }
+    },
+    {
+      "model": "Linear SVM",
+      "dataset": "financial_phrasebank",
+      "accuracy": 0.9382,
+      "precision_macro": 0.9332,
+      "recall_macro": 0.9072,
+      "f1_macro": 0.9194,
+      "train_time_s": 0.0,
+      "inference_time_s": 0.0,
+      "n_train": 1811,
+      "n_test": 453,
+      "confusion_matrix": [
+        [
+          54,
+          1,
+          6
+        ],
+        [
+          2,
+          274,
+          2
+        ],
+        [
+          2,
+          15,
+          97
+        ]
+      ],
+      "labels_order": [
+        "negative",
+        "neutral",
+        "positive"
+      ],
+      "classification_report": {
+        "negative": {
+          "precision": 0.9310344827586207,
+          "recall": 0.8852459016393442,
+          "f1-score": 0.907563025210084,
+          "support": 61.0
+        },
+        "neutral": {
+          "precision": 0.9448275862068966,
+          "recall": 0.9856115107913669,
+          "f1-score": 0.9647887323943662,
+          "support": 278.0
+        },
+        "positive": {
+          "precision": 0.9238095238095239,
+          "recall": 0.8508771929824561,
+          "f1-score": 0.8858447488584474,
+          "support": 114.0
+        },
+        "accuracy": 0.9381898454746137,
+        "macro avg": {
+          "precision": 0.933223864258347,
+          "recall": 0.9072448684710558,
+          "f1-score": 0.9193988354876326,
+          "support": 453.0
+        },
+        "weighted avg": {
+          "precision": 0.9376809230200415,
+          "recall": 0.9381898454746137,
+          "f1-score": 0.9372161446209977,
+          "support": 453.0
+        }
+      }
+    },
+    {
+      "model": "Random Forest",
+      "dataset": "financial_phrasebank",
+      "accuracy": 0.8631,
+      "precision_macro": 0.8599,
+      "recall_macro": 0.7596,
+      "f1_macro": 0.796,
+      "train_time_s": 0.354,
+      "inference_time_s": 0.0256,
+      "n_train": 1811,
+      "n_test": 453,
+      "confusion_matrix": [
+        [
+          35,
+          9,
+          17
+        ],
+        [
+          1,
+          274,
+          3
+        ],
+        [
+          3,
+          29,
+          82
+        ]
+      ],
+      "labels_order": [
+        "negative",
+        "neutral",
+        "positive"
+      ],
+      "classification_report": {
+        "negative": {
+          "precision": 0.8974358974358975,
+          "recall": 0.5737704918032787,
+          "f1-score": 0.7,
+          "support": 61.0
+        },
+        "neutral": {
+          "precision": 0.8782051282051282,
+          "recall": 0.9856115107913669,
+          "f1-score": 0.9288135593220339,
+          "support": 278.0
+        },
+        "positive": {
+          "precision": 0.803921568627451,
+          "recall": 0.7192982456140351,
+          "f1-score": 0.7592592592592593,
+          "support": 114.0
+        },
+        "accuracy": 0.8631346578366446,
+        "macro avg": {
+          "precision": 0.8598541980894921,
+          "recall": 0.7595600827362269,
+          "f1-score": 0.7960242728604311,
+          "support": 453.0
+        },
+        "weighted avg": {
+          "precision": 0.8621008260665447,
+          "recall": 0.8631346578366446,
+          "f1-score": 0.8553327263732472,
+          "support": 453.0
+        }
+      }
+    }
+  ],
+  "cross_domain": [
+    {
+      "experiment": "train_twitter_test_phrasebank",
+      "model": "Logistic Regression",
+      "accuracy": 0.7226,
+      "f1_macro": 0.5643
+    },
+    {
+      "experiment": "train_phrasebank_test_twitter",
+      "model": "Logistic Regression",
+      "accuracy": 0.6549,
+      "f1_macro": 0.3248
+    }
+  ],
+  "dataset_info": {
+    "twitter_financial_news": {
+      "n": 11931,
+      "dist": {
+        "neutral": 7744,
+        "positive": 2398,
+        "negative": 1789
+      },
+      "source": "https://huggingface.co/datasets/zeroshot/twitter-financial-news-sentiment",
+      "license": "MIT"
+    },
+    "financial_phrasebank": {
+      "n": 2264,
+      "dist": {
+        "neutral": 1391,
+        "positive": 570,
+        "negative": 303
+      },
+      "source": "https://huggingface.co/datasets/takala/financial_phrasebank (Malo et al. 2014)",
+      "license": "CC BY-NC-SA 3.0"
+    }
+  }
+}

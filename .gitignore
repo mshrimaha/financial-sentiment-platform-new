@@ -1,0 +1,11 @@
+node_modules/
+.next/
+__pycache__/
+*.pyc
+.env
+.env.local
+backend/financial_platform.db
+backend/uploads/
+backend/data/models/*.pkl
+backend/data/phrasebank_raw/
+.DS_Store

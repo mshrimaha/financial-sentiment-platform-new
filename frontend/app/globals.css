@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background-color: #070b12;
+  color: #e2e8f0;
+  scroll-behavior: smooth;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #263552 #0a0f1a;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #263552;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0f1a;
+}
+
+:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-xl border border-white/[0.08] bg-surface/90 shadow-[0_8px_30px_rgba(0,0,0,0.28)];
+  }
+  .card {
+    @apply rounded-xl border border-white/[0.08] bg-surface/90 shadow-[0_8px_30px_rgba(0,0,0,0.25)];
+  }
+  .section-rule {
+    @apply border-t border-white/[0.07];
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-150 active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-white shadow-[0_1px_12px_rgba(59,130,246,0.35)] hover:bg-accent-light;
+  }
+  .btn-ghost {
+    @apply btn border border-white/[0.12] bg-white/[0.03] text-slate-200 hover:border-white/[0.22] hover:bg-white/[0.07];
+  }
+  .btn-danger {
+    @apply btn border border-bear/35 bg-bear/10 text-red-300 hover:bg-bear/20;
+  }
+  .input {
+    @apply w-full rounded-lg border border-white/[0.12] bg-navy-900/90 px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 outline-none transition-colors duration-150 focus:border-accent focus:ring-1 focus:ring-accent/40;
+  }
+  .label {
+    @apply mb-1.5 block text-[11px] font-medium uppercase tracking-wider text-slate-400;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-medium;
+  }
+  .th {
+    @apply px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-400;
+  }
+  .td {
+    @apply px-4 py-3 text-sm text-slate-300;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}

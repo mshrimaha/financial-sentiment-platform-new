@@ -1,0 +1,342 @@
+// Prisma schema for the Supabase PostgreSQL deployment.
+// Usage:
+//   1. npm i -D prisma && npm i @prisma/client
+//   2. set DATABASE_URL and DIRECT_URL (Supabase pooled + direct connection strings)
+//   3. npx prisma migrate dev --name init   (or: npx prisma db push)
+//   4. npx prisma generate
+// Note: the local prototype persists to SQLite through backend/app/database.py;
+// this schema is the production target described in database/schema.sql.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @db.Uuid
+  email     String   @unique
+  fullName  String?  @map("full_name")
+  role      String   @default("researcher")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  datasets          Dataset[]
+  posts             SocialMediaPost[]
+  mediaUploads      MediaUpload[]
+  sentimentResults  SentimentResult[]
+  trainingRuns      ModelTrainingRun[]
+  collectionRecords PrimaryCollectionRecord[]
+  reports           GeneratedReport[]
+
+  @@map("users")
+}
+
+model Dataset {
+  id                String   @id @default(uuid()) @db.Uuid
+  ownerId           String?  @map("owner_id") @db.Uuid
+  name              String
+  slug              String?  @unique
+  source            String?
+  license           String?
+  description       String?
+  modality          String   @default("text")
+  recordCount       Int?     @map("record_count")
+  classDistribution Json?    @map("class_distribution")
+  columns           Json?
+  missingReport     Json?    @map("missing_report")
+  duplicateCount    Int      @default(0) @map("duplicate_count")
+  isBuiltin         Boolean  @default(false) @map("is_builtin")
+  preprocessingNotes String? @map("preprocessing_notes")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  owner  User?           @relation(fields: [ownerId], references: [id])
+  records DatasetRecord[]
+  posts   SocialMediaPost[]
+  runs    ModelTrainingRun[]
+
+  @@map("datasets")
+}
+
+model DatasetRecord {
+  id           String   @id @default(uuid()) @db.Uuid
+  datasetId    String   @map("dataset_id") @db.Uuid
+  text         String?
+  label        String?
+  labelNumeric Int?     @map("label_numeric") @db.SmallInt
+  split        String?
+  metadata     Json?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  dataset Dataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  @@index([datasetId])
+  @@map("dataset_records")
+}
+
+model StockTicker {
+  id        String   @id @default(uuid()) @db.Uuid
+  symbol    String   @unique
+  company   String?
+  exchange  String?
+  sector    String?
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  posts SocialMediaPost[]
+
+  @@map("stock_tickers")
+}
+
+model SocialMediaPost {
+  id           String    @id @default(uuid()) @db.Uuid
+  ownerId      String?   @map("owner_id") @db.Uuid
+  datasetId    String?   @map("dataset_id") @db.Uuid
+  platform     String?
+  contentType  String    @default("text") @map("content_type")
+  text         String?
+  tickerSymbol String?   @map("ticker_symbol")
+  authorHandle String?   @map("author_handle")
+  sourceUrl    String?   @map("source_url")
+  postedAt     DateTime? @map("posted_at")
+  collectedAt  DateTime  @default(now()) @map("collected_at")
+  isAnonymised Boolean   @default(true) @map("is_anonymised")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  owner      User?              @relation(fields: [ownerId], references: [id])
+  dataset    Dataset?           @relation(fields: [datasetId], references: [id])
+  ticker     StockTicker?       @relation(fields: [tickerSymbol], references: [symbol])
+  media      MediaUpload[]
+  reactions  Reaction[]
+  results    SentimentResult[]
+
+  @@index([ownerId])
+  @@index([tickerSymbol])
+  @@index([postedAt])
+  @@map("social_media_posts")
+}
+
+model MediaUpload {
+  id           String   @id @default(uuid()) @db.Uuid
+  ownerId      String?  @map("owner_id") @db.Uuid
+  postId       String?  @map("post_id") @db.Uuid
+  storagePath  String   @map("storage_path")
+  bucket       String   @default("media")
+  originalName String?  @map("original_name")
+  mediaType    String   @map("media_type")
+  mimeType     String?  @map("mime_type")
+  fileSize     BigInt?  @map("file_size")
+  durationSec  Decimal? @map("duration_sec") @db.Decimal(10, 2)
+  width        Int?
+  height       Int?
+  checksum     String?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  owner  User?             @relation(fields: [ownerId], references: [id])
+  post   SocialMediaPost?  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  primaryRecords PrimaryCollectionRecord[]
+
+  @@index([ownerId])
+  @@map("media_uploads")
+}
+
+model Reaction {
+  id           String   @id @default(uuid()) @db.Uuid
+  postId       String   @map("post_id") @db.Uuid
+  reactionType String   @map("reaction_type")
+  count        Int      @default(0)
+  isEmoji      Boolean  @default(false) @map("is_emoji")
+  emojiGlyph   String?  @map("emoji_glyph")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  post SocialMediaPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, reactionType])
+  @@map("reactions")
+}
+
+model SentimentResult {
+  id                    String   @id @default(uuid()) @db.Uuid
+  ownerId               String?  @map("owner_id") @db.Uuid
+  postId                String?  @map("post_id") @db.Uuid
+  financialSentiment    String?  @map("financial_sentiment")
+  confidence            Decimal? @db.Decimal(5, 4)
+  bullishScore          Decimal? @map("bullish_score") @db.Decimal(5, 4)
+  bearishScore          Decimal? @map("bearish_score") @db.Decimal(5, 4)
+  neutralScore          Decimal? @map("neutral_score") @db.Decimal(5, 4)
+  emotionLabel          String?  @map("emotion_label")
+  emotionConfidence     Decimal? @map("emotion_confidence") @db.Decimal(5, 4)
+  engagementScore       Decimal? @map("engagement_score") @db.Decimal(5, 2)
+  engagementLevel       String?  @map("engagement_level")
+  fusionMethod          String   @default("late_fusion") @map("fusion_method")
+  contributingModalities Json?   @map("contributing_modalities")
+  explanation           String?
+  modelVersion          String?  @map("model_version")
+  status                String   @default("completed")
+  createdAt             DateTime @default(now()) @map("created_at")
+
+  owner          User?             @relation(fields: [ownerId], references: [id])
+  post           SocialMediaPost?  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  modalityResults ModalityResult[]
+
+  @@index([ownerId])
+  @@index([createdAt])
+  @@map("sentiment_results")
+}
+
+model ModalityResult {
+  id                String   @id @default(uuid()) @db.Uuid
+  sentimentResultId String   @map("sentiment_result_id") @db.Uuid
+  modality          String
+  label             String?
+  confidence        Decimal? @db.Decimal(5, 4)
+  extractedText     String?  @map("extracted_text")
+  modelName         String?  @map("model_name")
+  processorStatus   String   @default("completed") @map("processor_status")
+  limitationNote    String?  @map("limitation_note")
+  details           Json?
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  sentimentResult SentimentResult @relation(fields: [sentimentResultId], references: [id], onDelete: Cascade)
+
+  @@map("modality_results")
+}
+
+model ModelTrainingRun {
+  id              String   @id @default(uuid()) @db.Uuid
+  ownerId         String?  @map("owner_id") @db.Uuid
+  datasetId       String?  @map("dataset_id") @db.Uuid
+  modelName       String   @map("model_name")
+  modelFamily     String   @default("classical") @map("model_family")
+  featureConfig   Json?    @map("feature_config")
+  splitConfig     Json?    @map("split_config")
+  nTrain          Int?     @map("n_train")
+  nTest           Int?     @map("n_test")
+  trainTimeS      Decimal? @map("train_time_s") @db.Decimal(10, 3)
+  inferenceTimeS  Decimal? @map("inference_time_s") @db.Decimal(10, 4)
+  artifactPath    String?  @map("artifact_path")
+  status          String   @default("completed")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  owner       User?             @relation(fields: [ownerId], references: [id])
+  dataset     Dataset?          @relation(fields: [datasetId], references: [id])
+  evaluations ModelEvaluation[]
+
+  @@map("model_training_runs")
+}
+
+model ModelEvaluation {
+  id                 String   @id @default(uuid()) @db.Uuid
+  trainingRunId      String   @map("training_run_id") @db.Uuid
+  accuracy           Decimal? @db.Decimal(6, 4)
+  precisionMacro     Decimal? @map("precision_macro") @db.Decimal(6, 4)
+  recallMacro        Decimal? @map("recall_macro") @db.Decimal(6, 4)
+  f1Macro            Decimal? @map("f1_macro") @db.Decimal(6, 4)
+  precisionWeighted  Decimal? @map("precision_weighted") @db.Decimal(6, 4)
+  recallWeighted     Decimal? @map("recall_weighted") @db.Decimal(6, 4)
+  f1Weighted         Decimal? @map("f1_weighted") @db.Decimal(6, 4)
+  confusionMatrix    Json?    @map("confusion_matrix")
+  perClassReport     Json?    @map("per_class_report")
+  labelsOrder        Json?    @map("labels_order")
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  trainingRun ModelTrainingRun @relation(fields: [trainingRunId], references: [id], onDelete: Cascade)
+
+  @@map("model_evaluations")
+}
+
+model PrimaryCollectionRecord {
+  id               String    @id @default(uuid()) @db.Uuid
+  ownerId          String?   @map("owner_id") @db.Uuid
+  platform         String
+  method           String?
+  text             String?
+  tickerSymbol     String?   @map("ticker_symbol")
+  postedAt         DateTime? @map("posted_at")
+  mediaType        String?   @default("text") @map("media_type")
+  mediaUploadId    String?   @map("media_upload_id") @db.Uuid
+  sourceIdentifier String?   @map("source_identifier")
+  consentObtained  Boolean   @default(false) @map("consent_obtained")
+  isAnonymised     Boolean   @default(true) @map("is_anonymised")
+  notes            String?
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  owner       User?          @relation(fields: [ownerId], references: [id])
+  mediaUpload MediaUpload?   @relation(fields: [mediaUploadId], references: [id])
+  annotations Annotation[]
+  agreement   AnnotationAgreement?
+
+  @@map("primary_collection_records")
+}
+
+model Annotation {
+  id           String   @id @default(uuid()) @db.Uuid
+  recordId     String   @map("record_id") @db.Uuid
+  annotatorId  String?  @map("annotator_id") @db.Uuid
+  annotatorTag String?  @map("annotator_tag")
+  label        String
+  confidence   Int?
+  rationale    String?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  record PrimaryCollectionRecord @relation(fields: [recordId], references: [id], onDelete: Cascade)
+
+  @@unique([recordId, annotatorTag])
+  @@map("annotations")
+}
+
+model AnnotationAgreement {
+  id             String   @id @default(uuid()) @db.Uuid
+  recordId       String   @unique @map("record_id") @db.Uuid
+  finalLabel     String?  @map("final_label")
+  agreement      Boolean?
+  resolvedBy     String?  @map("resolved_by")
+  resolutionNote String?  @map("resolution_note")
+  computedKappa  Decimal? @map("computed_kappa") @db.Decimal(6, 4)
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  record PrimaryCollectionRecord @relation(fields: [recordId], references: [id], onDelete: Cascade)
+
+  @@map("annotation_agreements")
+}
+
+model ResearchArticle {
+  id                 String   @id @default(uuid()) @db.Uuid
+  title              String
+  authors            String?
+  publicationYear    Int?     @map("publication_year")
+  venue              String?
+  doiOrUrl           String?  @map("doi_or_url")
+  datasetUsed        String?  @map("dataset_used")
+  modality           String?
+  methodology        String?
+  algorithms         String?
+  evaluationMetrics  String?  @map("evaluation_metrics")
+  reportedFindings   String?  @map("reported_findings")
+  limitations        String?
+  howWeDiffer        String?  @map("how_we_differ")
+  verificationStatus String   @default("verified") @map("verification_status")
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  @@map("research_articles")
+}
+
+model GeneratedReport {
+  id          String   @id @default(uuid()) @db.Uuid
+  ownerId     String?  @map("owner_id") @db.Uuid
+  title       String
+  reportType  String   @map("report_type")
+  storagePath String?  @map("storage_path")
+  summary     String?
+  parameters  Json?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  owner User? @relation(fields: [ownerId], references: [id])
+
+  @@index([ownerId])
+  @@map("generated_reports")
+}
